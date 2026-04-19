@@ -152,30 +152,3 @@ This project will be considered complete when:
 * Recovery process is clearly defined
 * All scenarios are documented
 
----
-
-## Key Learning Objective
-
-This project shifts focus from:
-
-> “building infrastructure”
-
-to:
-
-> **“operating and understanding systems in production”**
-
----
-
-## Interview Positioning
-
-This project can be described as:
-
-> “I built a production-like AWS infrastructure and extended it with a monitoring and incident response system, where I simulate failures and handle them.”
-
----
-
-## Notes
-
-* Focus is on **engineering understanding**, not feature complexity
-* Avoiding overengineering is intentional
-* System behavior and reasoning are prioritized over tools
