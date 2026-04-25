@@ -3,6 +3,7 @@
 ## Overview
 
 This project builds on an existing highly available AWS infrastructure:
+
 https://github.com/DanieleSetti/Highly-Available-Web-Application-Infrastructure-on-AWS
 
 It focuses on observability and operations — adding monitoring, alerting, and incident response to transform a running system into a production-ready, observable system.
