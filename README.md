@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project extends a production-like AWS infrastructure by adding a full monitoring and incident response layer.
+This project extends a production-like AWS infrastructure https://github.com/DanieleSetti/Highly-Available-Web-Application-Infrastructure-on-AWS by adding a full monitoring and incident response layer.
 
 The system is designed not only to run a web application, but to **detect failures, alert on issues, and guide recovery** — reflecting real-world DevOps responsibilities.
 
