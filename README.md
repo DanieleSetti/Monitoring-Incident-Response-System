@@ -1,154 +1,151 @@
-#AWS Infrastructure with Monitoring & Incident Response
+# Production Monitoring & Incident Response System on AWS
 
 ## Overview
 
-This project demonstrates a production-like AWS infrastructure for a web application, extended with a monitoring and incident response layer.
+This project extends a production-like AWS infrastructure by adding a full monitoring and incident response layer.
 
-The goal is not only to build infrastructure, but to show how a system is **observed, diagnosed, and recovered when failures occur**.
+The system is designed not only to run a web application, but to **detect failures, alert on issues, and guide recovery** — reflecting real-world DevOps responsibilities.
 
-The project evolves from a standard cloud deployment into an **operations-focused system**, reflecting real-world DevOps responsibilities.
+The application is deployed on EC2 instances behind an Application Load Balancer, with a PostgreSQL database on Amazon RDS. Monitoring is implemented using Prometheus and Grafana, with alerting based on system and application behavior.
+
+The goal is to demonstrate how a cloud system is **observed, diagnosed, and recovered**, not just deployed.
 
 ---
 
-## Current Architecture
+## Architecture
+
+High-level flow:
 
 Client → ALB → EC2 (Nginx + Node.js) → RDS
 
-* Multi-AZ setup
-* Private subnets for compute and database
-* Auto Scaling Group for high availability
-* Immutable deployments via Instance Refresh
++ Monitoring Layer:
+- Prometheus (metrics collection)
+- Node Exporter (EC2 system metrics)
+- Grafana (visualization)
+- Alerting rules (incident detection)
+
+### Key Characteristics
+
+- Multi-AZ deployment
+- Private subnets for compute and database
+- Auto Scaling Group (ephemeral instances)
+- Centralized monitoring system
+- Alert-based incident detection
 
 ---
 
-## New Layer: Observability & Operations
+## Tech Stack
 
-The project is being extended with an **operations layer**, focusing on:
-
-* Monitoring system behavior
-* Detecting failures
-* Responding to incidents
-* Understanding system health beyond infrastructure
-
----
-
-## Monitoring Strategy
-
-### CloudWatch (Implemented)
-
-Monitoring is currently based on AWS-native metrics, focusing on **system-level behavior**, not individual instances.
-
-#### Key Metrics:
-
-* **HTTPCode_ELB_5XX_Count**
-
-  * Detects backend failures
-* **UnHealthyHostCount**
-
-  * Detects failing instances behind the load balancer
-
-#### Alerts:
-
-* 5XX errors > threshold
-* Unhealthy targets > 0
-
-#### Important Design Choice:
-
-Monitoring is based on **ALB metrics**, not EC2 instance metrics.
-
-Reason:
-
-> Instances are ephemeral in Auto Scaling environments, so monitoring must focus on service behavior rather than individual machines.
+- **AWS**: VPC, EC2, Auto Scaling, ALB, RDS, NAT Gateway
+- **Monitoring**: Prometheus, Node Exporter, Grafana
+- **Backend**: Node.js (Express)
+- **Web Server**: Nginx
+- **CI/CD**: GitHub Actions
 
 ---
 
-## Incident Simulation (Completed)
+## Monitoring Setup
 
-The system was tested using real failure scenarios:
+The system collects and visualizes:
 
-### Scenario 1 — Instance Termination
+- CPU usage (per instance)
+- Memory usage
+- Network traffic
+- Instance availability (`up` metric)
 
-* EC2 instances were manually terminated
-* Auto Scaling replaced instances
-* ALB temporarily had unhealthy targets
-* Alert was triggered
+Prometheus scrapes:
+- Local node exporter
+- EC2 instances in private subnets
 
-### Scenario 2 — Application Failure
-
-* Backend became unavailable
-* 5XX errors increased
-* Alert was triggered
-
-### Result:
-
-* Alerts correctly transitioned: **OK → ALARM → OK**
-* System recovered automatically via ASG
+Grafana dashboards provide real-time visibility into system behavior.
 
 ---
 
-## Next Step: Prometheus + Grafana
+## Alerting
 
-To extend beyond AWS-native monitoring, the next phase introduces:
+Two core alerts are implemented:
 
-* **Prometheus** (metrics collection)
-* **Grafana** (visualization)
+### High CPU Usage
+- Trigger: CPU > 70% for 1 minute
+- Type: warning
 
-### Goals:
+### Instance Down
+- Trigger: `up == 0` for 30 seconds
+- Type: critical
 
-* Build custom monitoring outside AWS
-* Understand metric collection and scraping
-* Create dashboards for system behavior
-* Implement custom alerting logic
-
-### Initial Scope:
-
-* Node Exporter (CPU, memory)
-* Basic dashboards (Grafana)
-* Single-instance setup (no HA, no overengineering)
+Alerts are evaluated in Prometheus and visible in both Prometheus and Grafana UI.
 
 ---
 
-## Future Work
+## Incident Scenarios
 
-### 1. Advanced Monitoring
+### 🔴 Incident 1 — High CPU Load
 
-* Prometheus integration with EC2
-* Service discovery (ASG-aware)
-* Application-level metrics
-
-### 2. Logging
-
-* Centralized log collection
-* Error filtering and debugging
-
-### 3. Alerting Improvements
-
-* Reduce false positives
-* Introduce thresholds and time windows
-
-### 4. Incident Response
-
-Simulate and document failures:
-
-* Service crash
-* High CPU usage
-* Application errors
-
-For each scenario:
-
-* Detection
-* Investigation
-* Resolution
+- **Simulation**: `stress --cpu 2 --timeout 120`
+- **Detection**: Prometheus alert triggered
+- **Investigation**: CPU spike visible in Grafana
+- **Root Cause**: artificial CPU load
+- **Resolution**: stop stress process
+- **Verification**: CPU returns to normal, alert resolves
 
 ---
 
-## Definition of Done (Target State)
+### 🔴 Incident 2 — Instance Monitoring Failure
 
-This project will be considered complete when:
+- **Simulation**: `docker stop node_exporter`
+- **Detection**: `up == 0` alert triggered
+- **Investigation**: missing metrics from instance
+- **Root Cause**: exporter stopped
+- **Resolution**: restart exporter container
+- **Verification**: metrics restored, alert resolves
 
-* System failures are automatically detected
-* Alerts are triggered reliably
-* Root cause can be identified using metrics/logs
-* Recovery process is clearly defined
-* All scenarios are documented
+---
 
+### 🔴 Incident 3 — Application Failure (optional)
+
+- **Simulation**: stop backend service
+- **Detection**: ALB / metrics degradation
+- **Investigation**: application logs + missing responses
+- **Resolution**: restart service
+- **Verification**: traffic restored
+
+---
+
+## Key Design Decisions
+
+- Monitoring implemented as a separate layer (no changes to core infra)
+- Static Prometheus targets used for simplicity
+- Node Exporter deployed via EC2 initialization
+- Alerts focus on system-level signals rather than instance identity
+
+---
+
+## Known Limitations
+
+- Prometheus uses static IP targets (not ASG-aware)
+- No centralized log aggregation yet
+- No Alertmanager integration (notifications)
+
+### Production Improvements
+
+- EC2 service discovery (dynamic targets)
+- Alertmanager (Slack / Telegram alerts)
+- Centralized logging (ELK / CloudWatch Logs)
+- HTTPS and security hardening
+
+---
+
+## What This Project Demonstrates
+
+- Monitoring distributed systems in private networks
+- Detecting failures via metrics and alerts
+- Understanding system behavior under load
+- Handling incidents end-to-end
+
+---
+
+## Documentation
+
+Full infrastructure and architecture details:
+
+👉 `architecture.md`
