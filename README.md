@@ -16,10 +16,6 @@ The goal is to demonstrate how a cloud system is **observed, diagnosed, and reco
 
 ## Architecture
 
-High-level flow:
-
-Client → ALB → EC2 (Nginx + Node.js) → RDS
-
 + Monitoring Layer:
 - Prometheus (metrics collection)
 - Node Exporter (EC2 system metrics)
