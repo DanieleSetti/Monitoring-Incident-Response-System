@@ -2,9 +2,10 @@
 
 ## Overview
 
-This project extends https://github.com/DanieleSetti/Highly-Available-Web-Application-Infrastructure-on-AWS project by adding a full monitoring and incident response layer.
+This project builds on an existing highly available AWS infrastructure:
+https://github.com/DanieleSetti/Highly-Available-Web-Application-Infrastructure-on-AWS
 
-The system is designed not only to run a web application, but to **detect failures, alert on issues, and guide recovery** — reflecting real-world DevOps responsibilities.
+It focuses on observability and operations — adding monitoring, alerting, and incident response to transform a running system into a production-ready, observable system.
 
 The application is deployed on EC2 instances behind an Application Load Balancer, with a PostgreSQL database on Amazon RDS. Monitoring is implemented using Prometheus and Grafana, with alerting based on system and application behavior.
 
