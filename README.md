@@ -12,11 +12,6 @@ It focuses on observability and operations — adding monitoring, alerting, and 
 
 ## Architecture
 
-- Monitoring Layer:
-- Prometheus (metrics collection)
-- Node Exporter (EC2 system metrics)
-- Grafana (visualization)
-- Alerting rules (incident detection)
 - **AWS**: VPC, EC2, Auto Scaling, ALB, RDS, NAT Gateway
 - **Monitoring**: Prometheus, Node Exporter, Grafana
 - **Backend**: Node.js (Express)
