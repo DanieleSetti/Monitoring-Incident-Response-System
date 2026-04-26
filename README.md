@@ -6,7 +6,7 @@ This project builds on an existing highly available AWS infrastructure:
 
 https://github.com/DanieleSetti/Highly-Available-Web-Application-Infrastructure-on-AWS
 
-It focuses on observability and operations — adding monitoring, alerting, and incident response to transform a running system into a production-ready, observable system.
+It focuses on observability and operations — adding monitoring, alerting, and incident response to transform a running system into observable system.
 
 The application is deployed on EC2 instances behind an Application Load Balancer, with a PostgreSQL database on Amazon RDS. Monitoring is implemented using Prometheus and Grafana, with alerting based on system and application behavior.
 
@@ -21,14 +21,6 @@ The goal is to demonstrate how a cloud system is **observed, diagnosed, and reco
 - Node Exporter (EC2 system metrics)
 - Grafana (visualization)
 - Alerting rules (incident detection)
-
-### Key Characteristics
-
-- Multi-AZ deployment
-- Private subnets for compute and database
-- Auto Scaling Group (ephemeral instances)
-- Centralized monitoring system
-- Alert-based incident detection
 
 ---
 
@@ -104,8 +96,6 @@ This demonstrates:
 - **Resolution**: stop stress process
 - **Verification**: CPU returns to normal, alert resolves
 
-#### Evidence
-
 ![CPU Spike](./screenshots/cpu-spike.png)
 
 This shows:
@@ -124,8 +114,6 @@ This shows:
 - **Resolution**: restart exporter container
 - **Verification**: metrics restored, alert resolves
 
-#### Evidence
-
 ![Instance Down](./screenshots/instance-down.png)
 
 This shows:
@@ -141,8 +129,6 @@ This shows:
 - **Investigation**: increased error rate / unhealthy targets
 - **Resolution**: instance replaced or service restored
 - **Verification**: system returns to healthy state
-
-#### Evidence (CloudWatch)
 
 ![5XX Errors](./screenshots/5xx.png)
 
