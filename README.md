@@ -57,6 +57,15 @@ Prometheus scrapes:
 
 Grafana dashboards provide real-time visibility into system behavior.
 
+### 📊 System Dashboard
+
+![Dashboard](./screenshots/dashboard.png)
+
+This dashboard shows:
+- multiple EC2 instances simultaneously
+- real-time system behavior
+- baseline vs abnormal patterns
+
 ---
 
 ## Alerting
@@ -73,6 +82,15 @@ Two core alerts are implemented:
 
 Alerts are evaluated in Prometheus and visible in both Prometheus and Grafana UI.
 
+### 🚨 Active Alerts Example
+
+![Alerts](./screenshots/alerts.png)
+
+This demonstrates:
+- alerts firing under real conditions
+- automatic resolution after recovery
+- severity-based alerting
+
 ---
 
 ## Incident Scenarios
@@ -86,6 +104,15 @@ Alerts are evaluated in Prometheus and visible in both Prometheus and Grafana UI
 - **Resolution**: stop stress process
 - **Verification**: CPU returns to normal, alert resolves
 
+#### Evidence
+
+![CPU Spike](./screenshots/cpu-spike.png)
+
+This shows:
+- rapid CPU increase
+- peak usage (~100%)
+- return to baseline after resolution
+
 ---
 
 ### 🔴 Incident 2 — Instance Monitoring Failure
@@ -97,15 +124,33 @@ Alerts are evaluated in Prometheus and visible in both Prometheus and Grafana UI
 - **Resolution**: restart exporter container
 - **Verification**: metrics restored, alert resolves
 
+#### Evidence
+
+![Instance Down](./screenshots/instance-down.png)
+
+This shows:
+- instance becoming unavailable (`up = 0`)
+- recovery after restart
+
 ---
 
-### 🔴 Incident 3 — Application Failure (optional)
+### 🔴 Incident 3 — Application Failure (ALB perspective)
 
-- **Simulation**: stop backend service
-- **Detection**: ALB / metrics degradation
-- **Investigation**: application logs + missing responses
-- **Resolution**: restart service
-- **Verification**: traffic restored
+- **Simulation**: backend failure / instance termination
+- **Detection**: ALB metrics and CloudWatch alarms
+- **Investigation**: increased error rate / unhealthy targets
+- **Resolution**: instance replaced or service restored
+- **Verification**: system returns to healthy state
+
+#### Evidence (CloudWatch)
+
+![5XX Errors](./screenshots/5xx.png)
+
+- spikes in HTTP 5XX errors during failure
+
+![Unhealthy Hosts](./screenshots/unhealthy.png)
+
+- unhealthy instances detected by ALB
 
 ---
 
