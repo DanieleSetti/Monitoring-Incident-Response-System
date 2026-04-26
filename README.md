@@ -8,24 +8,15 @@ https://github.com/DanieleSetti/Highly-Available-Web-Application-Infrastructure-
 
 It focuses on observability and operations — adding monitoring, alerting, and incident response to transform a running system into observable system.
 
-The application is deployed on EC2 instances behind an Application Load Balancer, with a PostgreSQL database on Amazon RDS. Monitoring is implemented using Prometheus and Grafana, with alerting based on system and application behavior.
-
-The goal is to demonstrate how a cloud system is **observed, diagnosed, and recovered**, not just deployed.
-
 ---
 
 ## Architecture
 
-+ Monitoring Layer:
+- Monitoring Layer:
 - Prometheus (metrics collection)
 - Node Exporter (EC2 system metrics)
 - Grafana (visualization)
 - Alerting rules (incident detection)
-
----
-
-## Tech Stack
-
 - **AWS**: VPC, EC2, Auto Scaling, ALB, RDS, NAT Gateway
 - **Monitoring**: Prometheus, Node Exporter, Grafana
 - **Backend**: Node.js (Express)
